@@ -12,7 +12,7 @@ namespace Mosaic.Utilities.Responsive
 
 		private bool initialized = false;
 
-		private void OnEnable()
+		private void Awake()
 		{
 			if (initialized)
 				return;
