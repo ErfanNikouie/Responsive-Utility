@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mosaic.Utilities.Responsive
@@ -65,9 +63,7 @@ namespace Mosaic.Utilities.Responsive
 		public static void ScaleToExpandByCompoundRatio(RectTransform rectTransform, RatioXY ratio)
 		{
 			CheckInitialized();
-
-			//float compound = 1 + ((ratio.X + ratio.Y) / 4) * (screenRatio.x + screenRatio.y - 2) / 2; // 1 + (x/2 + y/2) / 2
-			
+						
 			float xfactor = screenRatio.x * ratio.X;
 			float yfactor = screenRatio.y * ratio.Y;
 			float compound = xfactor + yfactor;
@@ -76,6 +72,18 @@ namespace Mosaic.Utilities.Responsive
 			size *= compound;
 
 			rectTransform.sizeDelta = size;
+		}
+
+		public static void Position(RectTransform rectTransform, RatioXY anchor, Vector2 position)
+		{
+			CheckInitialized();
+
+			Vector2 pos = Vector2.zero;
+
+			pos.x += anchor.X * actualResolution.x + position.x * screenRatio.x;
+			pos.y += anchor.Y * actualResolution.y + position.y * screenRatio.y;
+
+			rectTransform.position = pos;
 		}
 	}
 }

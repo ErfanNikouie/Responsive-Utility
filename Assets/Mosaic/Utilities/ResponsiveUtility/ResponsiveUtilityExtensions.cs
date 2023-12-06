@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mosaic.Utilities.Responsive
@@ -10,5 +8,6 @@ namespace Mosaic.Utilities.Responsive
 		public static void ScaleToExpandByRatio(this RectTransform rectTransform, RatioXY ratio) => ResponsiveUtility.ScaleToExpandByRatio(rectTransform, ratio);
         public static void ScaleToExpandByCompoundRatio(this RectTransform rectTransform, RatioXY ratio) => ResponsiveUtility.ScaleToExpandByCompoundRatio(rectTransform, ratio);
 
+        public static void Position(this RectTransform rectTransform, RatioXY anchor, Vector2 position) => ResponsiveUtility.Position(rectTransform, anchor, position);
 	}
 }

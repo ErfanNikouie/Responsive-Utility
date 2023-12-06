@@ -19,26 +19,29 @@ namespace Mosaic.Utilities.Responsive
 
 		public void Apply(RectTransform rectTransform)
 		{
+			if (rectTransform == null)
+				return;
+
 			switch (scaleMethod)
 			{
 				case ScaleMethod.MatchScreenSizeX:
-					rectTransform?.ScaleToMatchScreenSize(relativeXY, useY: false);
+					rectTransform.ScaleToMatchScreenSize(relativeXY, useY: false);
 					break;
 
 				case ScaleMethod.MatchScreenSizeY:
-					rectTransform?.ScaleToMatchScreenSize(relativeXY, useX: false);
+					rectTransform.ScaleToMatchScreenSize(relativeXY, useX: false);
 					break;
 
 				case ScaleMethod.MatchScreenSizeBoth:
-					rectTransform?.ScaleToMatchScreenSize(relativeXY);
+					rectTransform.ScaleToMatchScreenSize(relativeXY);
 					break;
 
 				case ScaleMethod.ExpandByRatio:
-					rectTransform?.ScaleToExpandByRatio(relativeXY);
+					rectTransform.ScaleToExpandByRatio(relativeXY);
 					break;
 
 				case ScaleMethod.ExpandByCompoundRatio:
-					rectTransform?.ScaleToExpandByCompoundRatio(relativeXY);
+					rectTransform.ScaleToExpandByCompoundRatio(relativeXY);
 					break;
 
 				default:

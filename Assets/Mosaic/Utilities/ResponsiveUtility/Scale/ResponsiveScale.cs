@@ -4,17 +4,16 @@ namespace Mosaic.Utilities.Responsive
 {
 	public class ResponsiveScale : MonoBehaviour
     {
-
 		[SerializeField] private ScaleOperation[] scaleOperations;
 
-		RectTransform rectTransform = null;
+		private RectTransform rectTransform = null;
 		private Vector2 originalSize = Vector2.zero;
 
-		private bool scaled = false;
+		private bool initialized = false;
 
 		private void OnEnable()
 		{
-			if (scaled)
+			if (initialized)
 				return;
 
 			rectTransform = transform as RectTransform;
@@ -23,18 +22,12 @@ namespace Mosaic.Utilities.Responsive
 			Scale();
 		}
 
-		private void Update()
-		{
-			rectTransform.sizeDelta = originalSize;
-			Scale();
-		}
-
-		private void Scale()
+		public void Scale()
 		{
 			foreach (ScaleOperation operation in scaleOperations)
 				operation.Apply(rectTransform);
 
-			scaled = true;
+			initialized = true;
 		}
 	}
 }
