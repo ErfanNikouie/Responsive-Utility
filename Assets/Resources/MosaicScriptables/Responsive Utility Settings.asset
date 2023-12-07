@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e82143c068ec1543b15786d061f0ca3, type: 3}
-  m_Name: Responsive Settings
+  m_Name: Responsive Utility Settings
   m_EditorClassIdentifier: 
   referenceResolution: {x: 1080, y: 1920}
