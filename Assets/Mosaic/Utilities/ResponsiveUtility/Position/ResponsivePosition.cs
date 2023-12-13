@@ -6,6 +6,7 @@ namespace Mosaic.Utilities.Responsive
     {
         [SerializeField] private RatioXY anchor;
         [SerializeField] private Vector2 position;
+		[SerializeField] private bool local = false;
 
 		private RectTransform rectTransform = null;
 		private Vector2 originalPosition = Vector2.zero;
@@ -25,7 +26,7 @@ namespace Mosaic.Utilities.Responsive
 
 		public void Position(Vector2 position)
 		{
-			rectTransform?.Position(anchor, position);
+			rectTransform?.Position(anchor, position, local);
 			initialized = true;
 		}
 	}

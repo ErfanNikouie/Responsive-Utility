@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 namespace Mosaic.Utilities.Responsive
 {
@@ -74,14 +75,23 @@ namespace Mosaic.Utilities.Responsive
 			rectTransform.sizeDelta = size;
 		}
 
-		public static void Position(RectTransform rectTransform, RatioXY anchor, Vector2 position)
+		public static void Position(RectTransform rectTransform, RatioXY anchor, Vector2 position, bool local = false)
 		{
 			CheckInitialized();
 
 			Vector2 pos = Vector2.zero;
+			Vector2 center = new Vector2(anchor.X * actualResolution.x, anchor.Y * actualResolution.y);
 
-			pos.x += anchor.X * actualResolution.x + position.x * screenRatio.x;
-			pos.y += anchor.Y * actualResolution.y + position.y * screenRatio.y;
+			if (local)
+			{
+				RectTransform parent = rectTransform.parent.GetComponent<RectTransform>();
+				Vector2 parentRect = parent.sizeDelta * parent.localScale;
+				Vector2 bottomleftcorner = (Vector2)parent.position - (parentRect / 2);
+				center = bottomleftcorner + new Vector2(anchor.X * parentRect.x, anchor.Y * parentRect.y);
+			}
+
+			pos.x += center.x + position.x * screenRatio.x;
+			pos.y += center.y + position.y * screenRatio.y;
 
 			rectTransform.position = pos;
 		}
