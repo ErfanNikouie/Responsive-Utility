@@ -9,5 +9,11 @@ namespace Mosaic.Utilities.Responsive
         public static void ScaleToExpandByCompoundRatio(this RectTransform rectTransform, RatioXY ratio) => ResponsiveUtility.ScaleToExpandByCompoundRatio(rectTransform, ratio);
 
         public static void Position(this RectTransform rectTransform, RatioXY anchor, Vector2 position) => ResponsiveUtility.Position(rectTransform, anchor, position);
+
+        public static void SetResponsivePosition(this Transform transform, Vector2 position)
+        {
+            ResponsivePosition responsivePosition = transform.GetComponent<ResponsivePosition>();
+            responsivePosition?.Position(position);
+        }
 	}
 }
