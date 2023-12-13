@@ -2,18 +2,19 @@ using UnityEngine;
 
 namespace Mosaic.Utilities.Responsive
 {
-	public enum ScaleMethod
-	{
-		MatchScreenSizeX,
-		MatchScreenSizeY,
-		MatchScreenSizeBoth,
-		ExpandByRatio,
-		ExpandByCompoundRatio,
-	}
 
 	[System.Serializable]
 	public class ScaleOperation
 	{
+		private enum ScaleMethod
+		{
+			MatchScreenSizeX,
+			MatchScreenSizeY,
+			MatchScreenSizeBoth,
+			ExpandByRatio,
+			ExpandByCompoundRatio,
+		}
+
 		[SerializeField] private ScaleMethod scaleMethod = ScaleMethod.ExpandByRatio;
 		[SerializeField] private RatioXY relativeXY = new RatioXY(0.5f, 0.5f);
 

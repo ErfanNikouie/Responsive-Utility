@@ -1,5 +1,7 @@
+using System.Drawing;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
+using GridLG = UnityEngine.UI.GridLayoutGroup;
+using RT = UnityEngine.RectTransform;
 
 namespace Mosaic.Utilities.Responsive
 {
@@ -15,6 +17,16 @@ namespace Mosaic.Utilities.Responsive
 		{
 			Initialize();
 			return initalized;
+		}
+
+		private static float CalculateCompoundFactor(RatioXY ratio)
+		{
+			float xfactor = screenRatio.x * ratio.X;
+			float yfactor = screenRatio.y * ratio.Y;
+			float totalWeight = Mathf.Clamp(ratio.X + ratio.Y, 0.00001f, 2);
+			float compound = (xfactor + yfactor) / totalWeight;
+
+			return compound;
 		}
 
 		public static void Initialize()
@@ -36,65 +48,120 @@ namespace Mosaic.Utilities.Responsive
 			initalized = true;
 		}
 
-		public static void ScaleToMatchScreenSize(RectTransform rectTransform, RatioXY ratio, bool useX = true, bool useY = true)
-		{
-			CheckInitialized();
-
-			Vector2 size = rectTransform.sizeDelta;
-
-			if (useX)
-				size.x = actualResolution.x * ratio.X;
-			if (useY)
-				size.y = actualResolution.y * ratio.Y;
-
-			rectTransform.sizeDelta = size;
-		}
-
-		public static void ScaleToExpandByRatio(RectTransform rectTransform, RatioXY ratio)
-		{
-			CheckInitialized();
-
-			Vector2 size = rectTransform.sizeDelta;
-			size.x += size.x * ratio.X * (screenRatio.x  - 1);
-			size.y += size.y * ratio.Y * (screenRatio.y  - 1);
-
-			rectTransform.sizeDelta = size;
-		}
-
-		public static void ScaleToExpandByCompoundRatio(RectTransform rectTransform, RatioXY ratio)
-		{
-			CheckInitialized();
-						
-			float xfactor = screenRatio.x * ratio.X;
-			float yfactor = screenRatio.y * ratio.Y;
-			float totalWeight = Mathf.Clamp(ratio.X + ratio.Y, 0.00001f, 2);
-			float compound = (xfactor + yfactor) / totalWeight;
-
-			Vector2 size = rectTransform.sizeDelta;
-			size *= compound;
-
-			rectTransform.sizeDelta = size;
-		}
-
-		public static void Position(RectTransform rectTransform, RatioXY anchor, Vector2 position, bool local = false)
-		{
-			CheckInitialized();
-
-			Vector2 pos = Vector2.zero;
-			Vector2 center = new Vector2(anchor.X * actualResolution.x, anchor.Y * actualResolution.y);
-
-			if (local)
+		public static class Vector
+		{ 
+			public static void ScaleToExpandByRatio(ref Vector2 vector, RatioXY ratio)
 			{
-				RectTransform parent = rectTransform.parent.GetComponent<RectTransform>();
-				Vector2 parentRect = parent.sizeDelta * parent.localScale;
-				Vector2 bottomleftcorner = (Vector2)parent.position - (parentRect / 2);
-				center = bottomleftcorner + new Vector2(anchor.X * parentRect.x, anchor.Y * parentRect.y);
+				vector.x += vector.x * ratio.X * (screenRatio.x - 1);
+				vector.y += vector.y * ratio.Y * (screenRatio.y - 1);
 			}
 
-			pos.x += center.x + position.x * screenRatio.x;
-			pos.y += center.y + position.y * screenRatio.y;
+			public static void ScaleToExpandByCompoundRatio(ref Vector2 vector, RatioXY ratio)
+			{
+				float compound = CalculateCompoundFactor(ratio);
+				vector *= compound;
+			}
+		}
 
-			rectTransform.position = pos;
+		public static class RectTransform
+		{
+			public static void ScaleToMatchScreenSize(RT rectTransform, RatioXY ratio, bool useX = true, bool useY = true)
+			{
+				CheckInitialized();
+
+				Vector2 size = rectTransform.sizeDelta;
+
+				if (useX)
+					size.x = actualResolution.x * ratio.X;
+				if (useY)
+					size.y = actualResolution.y * ratio.Y;
+
+				rectTransform.sizeDelta = size;
+			}
+
+			public static void ScaleToExpandByRatio(RT rectTransform, RatioXY ratio)
+			{
+				CheckInitialized();
+
+				Vector2 size = rectTransform.sizeDelta;
+				Vector.ScaleToExpandByRatio(ref size, ratio);
+
+				rectTransform.sizeDelta = size;
+			}
+
+			public static void ScaleToExpandByCompoundRatio(RT rectTransform, RatioXY ratio)
+			{
+				CheckInitialized();
+
+				Vector2 size = rectTransform.sizeDelta;
+				Vector.ScaleToExpandByCompoundRatio(ref size, ratio);
+
+				rectTransform.sizeDelta = size;
+			}
+
+			public static void Position(RT rectTransform, RatioXY anchor, Vector2 position, bool local = false)
+			{
+				CheckInitialized();
+
+				Vector2 pos = Vector2.zero;
+				Vector2 center = new Vector2(anchor.X * actualResolution.x, anchor.Y * actualResolution.y);
+
+				if (local)
+				{
+					RT parent = rectTransform.parent.GetComponent<RT>();
+					Vector2 parentRect = parent.sizeDelta * parent.localScale;
+					Vector2 bottomleftcorner = (Vector2)parent.position - (parentRect / 2);
+					center = bottomleftcorner + new Vector2(anchor.X * parentRect.x, anchor.Y * parentRect.y);
+				}
+
+				pos.x += center.x + position.x * screenRatio.x;
+				pos.y += center.y + position.y * screenRatio.y;
+
+				rectTransform.position = pos;
+			}
+		}
+
+		public static class GridLayoutGroup
+		{
+			public static void CellScaleToExpandByRatio(GridLG grid, RatioXY ratio)
+			{
+				CheckInitialized();
+
+				Vector2 size = grid.cellSize;
+				Vector.ScaleToExpandByRatio(ref size, ratio);
+
+				grid.cellSize = size;
+			}
+
+			public static void CellScaleToExpandByCompoundRatio(GridLG grid, RatioXY ratio)
+			{
+				CheckInitialized();
+
+				Vector2 size = grid.cellSize;
+				Vector.ScaleToExpandByCompoundRatio(ref size, ratio);
+
+				grid.cellSize = size;
+			}
+
+			public static void SpacingScaleToExpandByRatio(GridLG grid, RatioXY ratio)
+			{
+				CheckInitialized();
+
+				Vector2 size = grid.spacing;
+				Vector.ScaleToExpandByRatio(ref size, ratio);
+
+				grid.spacing = size;
+			}
+
+			public static void SpacingScaleToExpandByCompoundRatio(GridLG grid, RatioXY ratio)
+			{
+				CheckInitialized();
+
+				Vector2 size = grid.spacing;
+				Vector.ScaleToExpandByCompoundRatio(ref size, ratio);
+
+				grid.spacing = size;
+			}
 		}
 	}
 }
