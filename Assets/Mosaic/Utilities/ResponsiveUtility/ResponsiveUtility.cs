@@ -67,7 +67,8 @@ namespace Mosaic.Utilities.Responsive
 						
 			float xfactor = screenRatio.x * ratio.X;
 			float yfactor = screenRatio.y * ratio.Y;
-			float compound = xfactor + yfactor;
+			float totalWeight = Mathf.Clamp(ratio.X + ratio.Y, 0.00001f, 2);
+			float compound = (xfactor + yfactor) / totalWeight;
 
 			Vector2 size = rectTransform.sizeDelta;
 			size *= compound;
