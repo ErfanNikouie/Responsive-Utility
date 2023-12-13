@@ -20,10 +20,10 @@ namespace Mosaic.Utilities.Responsive
 			rectTransform = transform as RectTransform;
 			originalPosition = rectTransform.position;
 
-			Position();
+			Position(position);
 		}
 
-		public void Position()
+		public void Position(Vector2 position)
 		{
 			rectTransform?.Position(anchor, position);
 			initialized = true;
