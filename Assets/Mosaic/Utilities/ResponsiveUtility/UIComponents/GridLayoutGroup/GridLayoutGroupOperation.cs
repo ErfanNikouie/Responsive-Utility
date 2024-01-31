@@ -57,11 +57,11 @@ namespace Mosaic.Utilities.Responsive
 			switch (scaleMethod)
 			{
 				case ScaleMethod.ExpandByRatio:
-					grid.CellScaleToExpandByRatio(relativeXY);
+					grid.SpacingScaleToExpandByRatio(relativeXY);
 					break;
 
 				case ScaleMethod.ExpandByCompoundRatio:
-					grid.CellScaleToExpandByCompoundRatio(relativeXY);
+					grid.SpacingScaleToExpandByCompoundRatio(relativeXY);
 					break;
 
 				default:
